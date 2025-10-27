@@ -11,6 +11,8 @@ rm -r specmnt
 cp spec_confs/aarch64.cfg SPEC/config
 cd SPEC
 . ./shrc   
-runspec --config=aarch64.cfg --action=build astar bwaves bzip2 cactusADM calculix gamess gcc GemsFDTD gobmk gromacs h264ref hmmer lbm leslie3d libquantum mcf milc namd omnetpp povray sjeng soplex tonto xalancbmk zeusmp -I
-runspec --config=aarch64.cfg --action=run --size=ref astar bwaves bzip2 cactusADM calculix gamess gcc GemsFDTD gobmk gromacs h264ref hmmer lbm leslie3d libquantum mcf milc namd omnetpp povray sjeng soplex tonto xalancbmk zeusmp --noreportable --iterations=1  -I
+# runspec --config=aarch64.cfg --action=build astar bwaves bzip2 cactusADM calculix gamess gcc GemsFDTD gobmk gromacs h264ref hmmer lbm leslie3d libquantum mcf milc namd omnetpp povray sjeng soplex tonto xalancbmk zeusmp -I
+runspec --config=aarch64.cfg --action=build lbm -I
+# runspec --config=aarch64.cfg --action=run --size=ref astar bwaves bzip2 cactusADM calculix gamess gcc GemsFDTD gobmk gromacs h264ref hmmer lbm leslie3d libquantum mcf milc namd omnetpp povray sjeng soplex tonto xalancbmk zeusmp --noreportable --iterations=1  -I
+runspec --config=aarch64.cfg --action=build lbm -I
 cd $BASE/scripts
