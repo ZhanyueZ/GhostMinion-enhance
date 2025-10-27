@@ -236,26 +236,29 @@ Troubleshooting
 How to run and how to build?
 =======
 
-*Microbenchmarks are in the micro-bench folder. We currently use GAP benchmark sets. It's graph-based. We can add more.
-*How to build GAP? cd into micro-bench/gapbs folder. Run  
-'''
+* Microbenchmarks are in the micro-bench folder. We currently use GAP benchmark sets. It's graph-based. We can add more.
+
+  
+* How to build GAP? cd into micro-bench/gapbs folder. Run  
+
+```
 make bfs \
   SERIAL=1 \ 
   CXX=arm-linux-gnueabihf-g++ \ 
   CXX_FLAGS='-std=c++11 -O3 -Wall -static -DNDEBUG -D_TIME_BITS=32 -DPTHREADS=0 -Wno-unknown-pragmas' 
-'''
+```
 
-*How to build gem5.opt? As it works for me: 
+* How to build gem5.opt? As it works for me:  
     Python version needs to be reverted to '3.7.17'  
-    run 
-    '''
+    run  
+    ```
     scons -j4 build/ARM/gem5.opt
-    ''' 
-
-    if it doesn't work: run 
-    '''
+    ```
+    
+    if it doesn't work: run  
+    ```
     scons -j4 build/ARM/gem5.opt CC=/usr/bin/gcc CXX=/usr/bin/g++   CCFLAGS=" -fno-lto " CXXFLAGS=" -fno-lto " LINKFLAGS=" -fno-lto "  
-    '''
+    ```
 
 
 Author
