@@ -1190,9 +1190,10 @@ BaseCache::access(PacketPtr pkt, CacheBlk *&blk, Cycles &lat,
     // Access block in the tags
     Cycles tag_latency(0);
     bool blkFromGhost = false;
-    blk = tags->accessBlock(pkt->getAddr(), pkt->isSecure(), tag_latency);
+    // blk = tags->accessBlock(pkt->getAddr(), pkt->isSecure(), tag_latency);
+    blk = tags->accessBlock(pkt, tag_latency);
     if(!blk && hasGhost) {
-	 blk = ghosttags->accessBlock(pkt->getAddr(), pkt->isSecure(), tag_latency);
+	 blk = ghosttags->accessBlock(pkt, tag_latency);
          if(blk) blkFromGhost=true;
 
 
