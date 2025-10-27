@@ -493,6 +493,10 @@ class SyscallTable32 :
         { base + 363, "sys_rt_tgsigqueueinfo" },
         { base + 364, "sys_perf_event_open" },
         { base + 365, "sys_recvmmsg" },
+        { base + 398, "no idea", ignoreFunc},
+        { base + 384, "no idea", ignoreFunc},
+        { base + 403, "no idea", ignoreFunc},
+        { base + 397, "no idea", ignoreFunc}
     })
     {}
 };
