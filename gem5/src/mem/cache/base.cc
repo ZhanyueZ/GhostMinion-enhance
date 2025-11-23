@@ -114,6 +114,7 @@ BaseCache::BaseCache(const BaseCacheParams *p, unsigned blk_size)
       hasGhost(p->has_ghost),
       prefetchOrdered(p->prefetch_ordered),
       blockCoherence(p->block_coherence),
+      cache_level_id(p->cache_level_id),
       stats(*this)
 {
     // the MSHR queue has no reserve entries as we check the MSHR
@@ -228,6 +229,17 @@ BaseCache::inRange(Addr addr) const
 void
 BaseCache::handleTimingReqHit(PacketPtr pkt, CacheBlk *blk, Tick request_time)
 {
+
+    if(pkt->isRead()) {
+        if(cache_level_id == 1) {
+            pkt->hit_level = HitLevel::HL_L1D;
+        } else if(cache_level_id == 2) {
+            pkt->hit_level = HitLevel::HL_L2;
+        } else if(cache_level_id == 3) {
+            pkt->hit_level = HitLevel::HL_LLC;
+        }
+    }
+    
     if (pkt->needsResponse()) {
         // These delays should have been consumed by now
         assert(pkt->headerDelay == 0);
@@ -2278,6 +2290,7 @@ BaseCache::CacheStats::CacheStats(BaseCache &c)
     replacements(this, "replacements", "number of replacements"),
 
     dataExpansions(this, "data_expansions", "number of data expansions"),
+    sufFilteredAccesses(this, "suf_filtered", "number of l1 access filtered" ),
     cmd(MemCmd::NUM_MEM_CMDS)
 {
     for (int idx = 0; idx < MemCmd::NUM_MEM_CMDS; ++idx)
@@ -2496,6 +2509,7 @@ BaseCache::CacheStats::regStats()
     }
 
     dataExpansions.flags(nozero | nonan);
+    sufFilteredAccesses.flags(nonan);
 }
 
 void
@@ -2612,8 +2626,8 @@ CpuSidePort::CpuSidePort(const std::string &_name, BaseCache *_cache,
 {
 }
 
-void BaseCache::CpuSidePort::commitaLoad(Addr addr,Addr pc) {
-    cache->commitLoad(addr,pc);
+void BaseCache::CpuSidePort::commitaLoad(Addr addr,Addr pc, uint8_t hit_level) {
+    cache->commitLoad(addr,pc, hit_level);
 }
 
 void BaseCache::CpuSidePort::sendGhostClear() {
@@ -2682,7 +2696,7 @@ BaseCache::MemSidePort::recvFunctionalShareCheck(PacketPtr pkt)
 }
 
 
-void BaseCache::MemSidePort::commitaLoad(Addr addr,Addr pc) {
+void BaseCache::MemSidePort::commitaLoad(Addr addr,Addr pc, uint8_t hit_level) {
 	assert(0);
    // cache->commitLoad(addr,pc);
 }

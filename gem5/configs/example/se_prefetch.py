@@ -272,12 +272,18 @@ else:
     system.membus = SystemXBar()
     system.system_port = system.membus.slave
     CacheConfig.config_cache(options, system)
-    #try to use plru
-    # from m5.objects import TreePLRURP  as _TreePLRU
     
-    # for cpu in system.cpu:
-    #     if hasattr(cpu, "dcache") and cpu.dcache:
-    #         cpu.dcache.replacement_policy = _TreePLRU()
+    from m5.objects import *
+    def _make_pf(name):
+        try:
+            return globals()[name]()
+        except KeyError:
+            fatal("Unknown prefetcher class : %s " %name)
+    
+    if getattr(options, "dcache_prefetcher", ""):
+        for i in range(np):
+            if hasattr(system.cpu[i], "dcache") and system.cpu[i].dcache:
+                system.cpu[i].dcache.prefetcher = _make_pf(options.dcache_prefetcher)
     
     MemConfig.config_mem(options, system)
     config_filesystem(system, options)

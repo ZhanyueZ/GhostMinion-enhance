@@ -113,6 +113,14 @@ LSQUnit<Impl>::completeDataAccess(PacketPtr pkt)
     LSQSenderState *state = dynamic_cast<LSQSenderState *>(pkt->senderState);
     DynInstPtr inst = state->inst;
 
+    if(pkt->isRead() && !inst->isSquashed()) {
+        if(inst->isLoad()) {
+            auto idx = inst->lqIdx;
+            if(idx >=0 && idx < loadQueue.size()) {
+                loadQueue[idx].setHitLevel(pkt->hit_level);
+            }
+        }
+    }
     // hardware transactional memory
     // sanity check
     if (pkt->isHtmTransactional() && !inst->isSquashed()) {

@@ -793,6 +793,10 @@ class FullO3CPU : public BaseO3CPU
     // hardware transactional memory
     void htmSendAbortSignal(ThreadID tid, uint64_t htm_uid,
                             HtmFailureFaultCause cause);
+
+    uint8_t getCacheHitLevel(ThreadID tid, int lq_idx) {
+      return iew.ldstQueue.getCacheHitLevel(tid, lq_idx);
+    }
 };
 
 #endif // __CPU_O3_CPU_HH__

@@ -371,7 +371,7 @@ tracePacket(System *sys, const char *label, PacketPtr pkt)
 
 void
 AbstractMemory::access(PacketPtr pkt)
-{
+{   
     if (pkt->cacheResponding()) {
         DPRINTF(MemoryAccess, "Cache responding to %#llx: not responding\n",
                 pkt->getAddr());

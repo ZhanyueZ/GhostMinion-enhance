@@ -963,7 +963,9 @@ class LSQ
     /** Returns the total number of stores for a single thread. */
     int numStores(ThreadID tid) { return thread.at(tid).numStores(); }
 
-
+    /** get the cache hit level of certain entry in the lsq */
+    uint8_t getCacheHitLevel(ThreadID tid, int lq_idx);
+    
     // hardware transactional memory
 
     int numHtmStarts(ThreadID tid) const

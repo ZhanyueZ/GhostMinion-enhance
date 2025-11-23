@@ -100,10 +100,14 @@ class LSQUnit
         uint32_t _size;
         /** Valid entry. */
         bool _valid;
+
+        /** SUF: record hit cache level for each load entry */
+        uint8_t _hitLevel;
+
       public:
         /** Constructs an empty store queue entry. */
         LSQEntry()
-            : inst(nullptr), req(nullptr), _size(0), _valid(false)
+            : inst(nullptr), req(nullptr), _size(0), _valid(false), _hitLevel(HitLevel::HL_UNKNOWN)
         {
         }
 
@@ -126,6 +130,7 @@ class LSQUnit
             req = nullptr;
             _valid = false;
             _size = 0;
+            _hitLevel = HitLevel::HL_UNKNOWN;
         }
 
         void
@@ -135,6 +140,7 @@ class LSQUnit
             this->inst = inst;
             _valid = true;
             _size = 0;
+            _hitLevel = HitLevel::HL_UNKNOWN;
         }
         LSQRequest* request() { return req; }
         void setRequest(LSQRequest* r) { req = r; }
@@ -145,6 +151,9 @@ class LSQUnit
         uint32_t& size() { return _size; }
         const uint32_t& size() const { return _size; }
         const DynInstPtr& instruction() const { return inst; }
+
+        void setHitLevel(uint8_t hl) {_hitLevel = hl; }
+        uint8_t getHitLevel() {return _hitLevel; }
         /** @} */
     };
 
@@ -402,6 +411,14 @@ class LSQUnit
     void schedule(Event& ev, Tick when) { cpu->schedule(ev, when); }
 
     BaseTLB* dTLB() { return cpu->dtb; }
+
+    uint8_t getCacheHitLevel(int lq_idx) {
+        // assert(lq_idx >= 0 && lq_idx <= loadQueue.size());
+        if(lq_idx >= 0 && lq_idx <= loadQueue.size()) {
+            return loadQueue[lq_idx].getHitLevel();
+        }
+        return HitLevel::HL_UNKNOWN;
+    }
 
   private:
     /** Pointer to the CPU. */

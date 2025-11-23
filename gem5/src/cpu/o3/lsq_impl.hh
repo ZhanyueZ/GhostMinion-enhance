@@ -117,6 +117,13 @@ LSQ<Impl>::name() const
 }
 
 template<class Impl>
+uint8_t 
+LSQ<Impl>::getCacheHitLevel(ThreadID tid, int lq_idx)
+{
+    return thread[tid].getCacheHitLevel(lq_idx);
+}
+
+template<class Impl>
 void
 LSQ<Impl>::setActiveThreads(list<ThreadID> *at_ptr)
 {

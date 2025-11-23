@@ -117,7 +117,7 @@ class Port
         _connected = true;
     }
 
-virtual     void commitaLoad(Addr addr,Addr pc);
+virtual     void commitaLoad(Addr addr,Addr pc, uint8_t hit_level);
 
 virtual void sendGhostClear();
 

@@ -97,6 +97,9 @@ class BaseCache : public ClockedObject
         MSHRQueue_WriteBuffer
     };
 
+    /* cache level */
+    int cache_level_id;
+    
   public:
     /**
      * Reasons for caches to be blocked.
@@ -232,7 +235,7 @@ class BaseCache : public ClockedObject
 
       public:
 
-virtual     void commitaLoad(Addr addr,Addr pc);
+virtual     void commitaLoad(Addr addr,Addr pc, uint8_t hit_level);
 
 virtual void sendGhostClear();
 
@@ -308,7 +311,7 @@ virtual void sendGhostClear();
         virtual bool recvFunctionalShareCheck(PacketPtr pkt);
 
 
-        virtual void commitaLoad(Addr addr,Addr pc) override;
+        virtual void commitaLoad(Addr addr,Addr pc, uint8_t hit_level) override;
         virtual void sendGhostClear() override;
 
         virtual AddrRangeList getAddrRanges() const override;
@@ -1105,6 +1108,8 @@ virtual void sendGhostClear();
 
         /** Per-command statistics */
         std::vector<std::unique_ptr<CacheCmdStats>> cmd;
+
+        Stats::Scalar sufFilteredAccesses;
     } stats;
 
     /** Registers probes. */
@@ -1302,7 +1307,7 @@ virtual void sendGhostClear();
      */
     virtual bool sendMSHRQueuePacket(MSHR* mshr);
 
-    void commitLoad(Addr addr, Addr pc);
+    void commitLoad(Addr addr, Addr pc, uint8_t hit_level);
     void ghostClear();
 
 

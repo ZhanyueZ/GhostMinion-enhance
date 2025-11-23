@@ -247,6 +247,15 @@ class MemCmd
     bool operator!=(MemCmd c2) const { return (cmd != c2.cmd); }
 };
 
+
+enum HitLevel : uint8_t {
+    HL_UNKNOWN  = 0,
+    HL_L1D = 1,
+    HL_L2 = 2,
+    HL_LLC = 3,
+    HL_DRAM = 4
+};
+
 /**
  * A Packet is used to encapsulate a transfer between two objects in
  * the memory system (e.g., the L1 and L2 cache).  (In contrast, a
@@ -510,6 +519,7 @@ class Packet : public Printable
     
         bool fromL2;
 
+    uint8_t hit_level;
 
     /**
      * Push a new sender state to the packet and make the current
@@ -832,7 +842,7 @@ class Packet : public Printable
            htmReturnReason(HtmCacheFailure::NO_FAIL),
            htmTransactionUid(0),
            headerDelay(0), snoopDelay(0),
-           payloadDelay(0), senderState(NULL), fromL2(false)
+           payloadDelay(0), senderState(NULL), fromL2(false), hit_level(HL_UNKNOWN)
     {
         flags.clear();
         if (req->hasPaddr()) {
@@ -873,7 +883,7 @@ class Packet : public Printable
            htmReturnReason(HtmCacheFailure::NO_FAIL),
            htmTransactionUid(0),
            headerDelay(0),
-           snoopDelay(0), payloadDelay(0), senderState(NULL), fromL2(false)
+           snoopDelay(0), payloadDelay(0), senderState(NULL), fromL2(false), hit_level(HL_UNKNOWN)
     {
         flags.clear();
         if (req->hasPaddr()) {
@@ -903,7 +913,7 @@ class Packet : public Printable
            headerDelay(pkt->headerDelay),
            snoopDelay(0),
            payloadDelay(pkt->payloadDelay),
-           senderState(pkt->senderState), fromL2(pkt->fromL2)
+           senderState(pkt->senderState), fromL2(pkt->fromL2), hit_level(pkt->hit_level)
     {
         if (!clear_flags)
             flags.set(pkt->flags & COPY_FLAGS);

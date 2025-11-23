@@ -52,7 +52,7 @@ Port::Port(const std::string& _name, PortID _id) :
 {}
 Port::~Port() {}
 
-void Port::commitaLoad(Addr addr,Addr pc) {
+void Port::commitaLoad(Addr addr,Addr pc,uint8_t hit_level) {
 	//_responsePort->commitaLoad(addr,pc);
         panic("%s was not expecting a commitLoad\n", name());
 }

@@ -160,7 +160,7 @@ class RequestPort: public Port, public AtomicRequestProtocol,
     
     bool sendFunctionalSnoopCheck(PacketPtr pkt);
     bool sendFunctionalShareCheck(PacketPtr pkt);
-virtual     void commitaLoad(Addr addr,Addr pc);
+virtual     void commitaLoad(Addr addr,Addr pc, uint8_t hit_level);
 
 virtual void sendGhostClear();
 
@@ -372,7 +372,7 @@ class ResponsePort : public Port, public AtomicResponseProtocol,
 
 bool sendFunctionalShareCheck(PacketPtr pkt);
 
-virtual void commitaLoad(Addr addr,Addr pc) {
+virtual void commitaLoad(Addr addr,Addr pc, uint8_t hit_level) {
         panic("%s was not expecting a slave port commitLoad\n", name());
 }
 

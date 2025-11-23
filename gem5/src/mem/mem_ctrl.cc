@@ -635,6 +635,13 @@ MemCtrl::accessAndRespond(PacketPtr pkt, Tick static_latency)
               pkt->print());
     }
 
+    //
+    if(pkt->isRead()) {
+        if(pkt->hit_level == HitLevel::HL_UNKNOWN) {
+            pkt->hit_level = HitLevel::HL_DRAM;
+        }
+    }
+    
     // turn packet around to go back to requestor if response expected
     if (needsResponse) {
         // access already turned the packet into a response

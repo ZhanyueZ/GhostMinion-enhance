@@ -1058,8 +1058,8 @@ DefaultCommit<Impl>::commitInsts()
 		Addr paddr=thisPC.paddr;
    		//Addr pcOffset = fetchOffset[tid];
 
-		//commit instruction load
-	    cpu->getInstPort().commitaLoad(paddr, pc[tid].instAddr());
+		//commit instruction load // we don't wanna filter i-cache
+	    cpu->getInstPort().commitaLoad(paddr, pc[tid].instAddr(), 0);
 
 
             // Increment the total number of non-speculative instructions
@@ -1082,8 +1082,12 @@ DefaultCommit<Impl>::commitInsts()
 					//does loads and stores for the prefetcher, which currently doesn't distinguish the two.
 					  //  printf("committing load addr %ld at pc %ld\n", head_inst->physEffAddr,pc[tid].instAddr());
 					//TODO: add notion of timestamp in here? Probably done inplicitly in cache by overeager evict.
-					cpu->getDataPort().commitaLoad(head_inst->physEffAddr, pc[tid].instAddr());
-
+                    int src_level = 0;
+                    if(head_inst->isLoad()) {
+                        src_level = cpu->getCacheHitLevel(tid, head_inst->lqIdx);
+                    }
+					cpu->getDataPort().commitaLoad(head_inst->physEffAddr, pc[tid].instAddr(),src_level);
+                    
                 }
 
                 // hardware transactional memory

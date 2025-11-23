@@ -71,9 +71,12 @@ Cache::Cache(const CacheParams *p)
 {
 }
 
-void BaseCache::commitLoad(Addr addr, Addr pc) {
+void BaseCache::commitLoad(Addr addr, Addr pc, uint8_t hit_level) {
 
     if(!hasGhost) return;
+
+
+
     CacheBlk *blk = ghosttags->findBlock(addr - (addr %blkSize), false);
 
 
@@ -96,7 +99,20 @@ void BaseCache::commitLoad(Addr addr, Addr pc) {
 	    //Really, we don't know whether it's a hit or miss, since we don't record.
             blk->fromL2 = false;
     }
+
+    static int debug_count = 0;
+    if (debug_count < 50) {
+        std::cout << "DEBUG SUF: Addr=" << std::hex << addr 
+                  << " PC=" << pc 
+                  << " HitLevel=" << (int)hit_level << std::dec << std::endl;
+        debug_count++;
+    }
     
+    //suf logic
+    if(hit_level == HitLevel::HL_L1D) {
+        stats.sufFilteredAccesses++;
+        return;
+    }
     
      if(blk) {
 	stats.ghostCommits++;
@@ -105,7 +121,7 @@ void BaseCache::commitLoad(Addr addr, Addr pc) {
 	blk->timestamp = 0;
 		PacketList writebacks;
 	assert(!tags->findBlock(addr - (addr %blkSize), false));
-	if(!tags->findBlock(addr - (addr %blkSize), false)){
+	// if(!tags->findBlock(addr - (addr %blkSize), false)){
 		//assert(0);
 
 		RequestPtr req_func = std::make_shared<Request>(addr - (addr %blkSize),
@@ -131,7 +147,7 @@ void BaseCache::commitLoad(Addr addr, Addr pc) {
 		else newBlk->status &= ~BlkWritable;
 
 
-	}
+	// }
         	if(!writebacks.empty())doWritebacks(writebacks,clockEdge()); //TODO: maybe atomic.
 	
     } else {

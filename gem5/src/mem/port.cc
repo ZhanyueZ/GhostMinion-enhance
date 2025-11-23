@@ -185,8 +185,8 @@ RequestPort::sendFunctionalShareCheck(PacketPtr pkt)
 
 
 
-void RequestPort::commitaLoad(Addr addr,Addr pc) {
-	_responsePort->commitaLoad(addr,pc);
+void RequestPort::commitaLoad(Addr addr,Addr pc, uint8_t hit_level) {
+	_responsePort->commitaLoad(addr,pc, hit_level);
      //   panic("%s was not expecting a master port commitLoad\n", name());
 }
 
