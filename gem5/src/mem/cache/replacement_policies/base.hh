@@ -91,7 +91,7 @@ class BaseReplacementPolicy : public SimObject
     virtual void reset(const std::shared_ptr<ReplacementData>&
                                                 replacement_data) const = 0;
     
-    virtual void reset(const std::shared_ptr<ReplacementData>& replacement_data, const PacketPtr ptk)
+    virtual void reset(const std::shared_ptr<ReplacementData>& replacement_data, const PacketPtr pkt)
     {
       reset(replacement_data);
     }

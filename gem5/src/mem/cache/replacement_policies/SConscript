@@ -40,3 +40,6 @@ Source('random_rp.cc')
 Source('second_chance_rp.cc')
 Source('tree_plru_rp.cc')
 Source('weighted_lru_rp.cc')
+Source('three_q_rp.cc')
+
+DebugFlag("ThreeQ", "Debug prints for Three Q Replacemnt policy")

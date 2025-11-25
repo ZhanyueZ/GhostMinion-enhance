@@ -99,3 +99,12 @@ class WeightedLRURP(BaseReplacementPolicy):
     type = "WeightedLRURP"
     cxx_class = "WeightedLRUPolicy"
     cxx_header = "mem/cache/replacement_policies/weighted_lru_rp.hh"
+
+class ThreeQRP(BaseReplacementPolicy):
+    type = "ThreeQRP"
+    cxx_class = "ThreeQRP"
+    cxx_header = "mem/cache/replacement_policies/three_q_rp.hh"
+    system = Param.System(Parent.any, 'System of this replacement policy belongs to')
+    index_bit = Param.Int(0, "Number of bits of index bit of given address")
+    small_queue_percent = Param.Float(0.3, "Percentage of size of small queues in a set")
+    assoc = Param.Int(0, "Number of assoc")

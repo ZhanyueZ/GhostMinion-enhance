@@ -45,9 +45,21 @@ from __future__ import absolute_import
 
 import m5
 from m5.objects import *
+import math
 from common.Caches import *
 from common import ObjectList
 
+
+def _to_bytes(s : str) -> int :
+    s = str(s).strip().lower()
+    if s.endswith("kb"): return int(s[:-2]) * 1024
+    if s.endswith("mb"): return int(s[:-2]) * 1024 * 1024
+    if s.endswith("b"): return int(s[:-1])
+    return int(s)
+
+
+    
+    
 def config_cache(options, system):
     if options.external_memory_system and (options.caches or options.l2cache):
         print("External caches and internal caches are exclusive options.\n")
@@ -118,10 +130,21 @@ def config_cache(options, system):
 
     for i in range(options.num_cpus):
         if options.caches:
+            
+            d_size_bytes = _to_bytes(options.l1d_size)
+            d_line_size = options.cacheline_size
+            d_assoc = options.l1d_assoc
+            
+            d_num_sets = max(1, int(d_size_bytes // (d_assoc * d_line_size)))
+            d_index_bits = int(math.floor(math.log(d_num_sets, 2)))
+            
+            dcache_rp = ThreeQRP(index_bit=d_index_bits, small_queue_percent=0.3, assoc=d_assoc)
+            
+            
             icache = icache_class(size=options.l1i_size,
                                   assoc=options.l1i_assoc, has_ghost=options.iminion, ghostSize=options.ghost_size,ghostAssoc=options.ghost_assoc, write_buffers = 256)
             dcache = dcache_class(size=options.l1d_size,
-                                  assoc=options.l1d_assoc,has_ghost=options.ghostminion, prefetch_ordered = options.prefetch_ordered, block_coherence = options.cache_coher, ghostSize=options.ghost_size,ghostAssoc=options.ghost_assoc, write_buffers = 256, cache_level_id=1)
+                                  assoc=options.l1d_assoc,has_ghost=options.ghostminion, prefetch_ordered = options.prefetch_ordered, block_coherence = options.cache_coher, ghostSize=options.ghost_size,ghostAssoc=options.ghost_assoc, write_buffers = 256, cache_level_id=1, replacement_policy=dcache_rp)
 
             # If we have a walker cache specified, instantiate two
             # instances here
