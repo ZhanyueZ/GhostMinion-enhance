@@ -143,6 +143,7 @@ def addNoISAOptions(parser):
     parser.add_option("--l3_assoc", type="int", default=16)
     parser.add_option("--cacheline_size", type="int", default=64)
     parser.add_option("--dcache_prefetcher", type="string", default="")
+    parser.add_option("--suf", action="store_true",default=False)
 
     # Enable Ruby
     parser.add_option("--ruby", action="store_true")

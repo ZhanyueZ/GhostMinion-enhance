@@ -99,6 +99,8 @@ class BaseCache : public ClockedObject
 
     /* cache level */
     int cache_level_id;
+
+    const bool enableSuf;
     
   public:
     /**

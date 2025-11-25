@@ -140,11 +140,12 @@ def config_cache(options, system):
             
             dcache_rp = ThreeQRP(index_bit=d_index_bits, small_queue_percent=0.3, assoc=d_assoc)
             
+            # dcache_rp = LRURP()
             
             icache = icache_class(size=options.l1i_size,
                                   assoc=options.l1i_assoc, has_ghost=options.iminion, ghostSize=options.ghost_size,ghostAssoc=options.ghost_assoc, write_buffers = 256)
             dcache = dcache_class(size=options.l1d_size,
-                                  assoc=options.l1d_assoc,has_ghost=options.ghostminion, prefetch_ordered = options.prefetch_ordered, block_coherence = options.cache_coher, ghostSize=options.ghost_size,ghostAssoc=options.ghost_assoc, write_buffers = 256, cache_level_id=1, replacement_policy=dcache_rp)
+                                  assoc=options.l1d_assoc,has_ghost=options.ghostminion, prefetch_ordered = options.prefetch_ordered, block_coherence = options.cache_coher, ghostSize=options.ghost_size,ghostAssoc=options.ghost_assoc, write_buffers = 256, cache_level_id=1, replacement_policy=dcache_rp, enable_suf=options.suf)
 
             # If we have a walker cache specified, instantiate two
             # instances here

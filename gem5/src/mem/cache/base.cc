@@ -115,6 +115,7 @@ BaseCache::BaseCache(const BaseCacheParams *p, unsigned blk_size)
       prefetchOrdered(p->prefetch_ordered),
       blockCoherence(p->block_coherence),
       cache_level_id(p->cache_level_id),
+      enableSuf(p->enable_suf),
       stats(*this)
 {
     // the MSHR queue has no reserve entries as we check the MSHR

@@ -109,7 +109,7 @@ void BaseCache::commitLoad(Addr addr, Addr pc, uint8_t hit_level) {
     }
     
     //suf logic
-    if(hit_level == HitLevel::HL_L1D) {
+    if(enableSuf && hit_level == HitLevel::HL_L1D) {
         stats.sufFilteredAccesses++;
         return;
     }
