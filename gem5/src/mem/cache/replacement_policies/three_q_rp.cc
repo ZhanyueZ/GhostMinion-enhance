@@ -163,7 +163,7 @@ ThreeQRP::getVictim(const ReplacementCandidates& candidates) const
         if(d->pos == ThreeQReplData::Position::S) ++sCnt;
         else if(d->pos == ThreeQReplData::Position::M) ++mCnt;
     }
-   DPRINTF(ThreeQ, "getVictim: sCnt=%u mCnt=%u\n", sCnt, mCnt);
+   DPRINTF(ThreeQ, "getVictim: sCnt=%u mCnt=%u set=%u victims size: %u \n", sCnt, mCnt, candidates[0]->getSet(), candidates.size());
 
     // helper method to find tail of a queue
     auto pickTail = [](const ReplacementCandidates& cs, ThreeQReplData::Position queue) 
@@ -219,6 +219,7 @@ ThreeQRP::getVictim(const ReplacementCandidates& candidates) const
             /*evict M*/
             while(true) {
                 auto [mTailEntry, mTailData] = pickTail(candidates, ThreeQReplData::Position::M);
+
                 if(mTailData->freq > 0) {
                     mTailData->freq--;
                     mTailData->tickInserted = nextStamp();

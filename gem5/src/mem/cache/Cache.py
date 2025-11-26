@@ -39,7 +39,7 @@
 from m5.params import *
 from m5.proxy import *
 from m5.SimObject import SimObject
-
+from m5.objects.ReplacementPolicies import LRURP
 from m5.objects.ClockedObject import ClockedObject
 from m5.objects.Compressors import BaseCacheCompressor
 from m5.objects.Prefetcher import BasePrefetcher
@@ -107,7 +107,7 @@ class BaseCache(ClockedObject):
          "Notify the hardware prefetcher on every access (not just misses)")
 
     tags = Param.BaseTags(BaseSetAssoc(), "Tag store")
-    ghosttags = Param.BaseTags(BaseSetAssoc(ghost=True), "Ghost Tag store")
+    ghosttags = Param.BaseTags(BaseSetAssoc(ghost=True, replacement_policy=LRURP()), "Ghost Tag store")
     replacement_policy = Param.BaseReplacementPolicy(LRURP(),
         "Replacement policy")
 

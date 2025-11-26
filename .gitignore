@@ -38,3 +38,5 @@ python_script
 runs_gem5_gapbs_*
 micro-bench
 plots
+
+gapbs*

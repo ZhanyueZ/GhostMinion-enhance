@@ -421,7 +421,7 @@ class SyscallTable32 :
         { base + 290, "sendto" },
         { base + 291, "recv" },
         { base + 292, "recvfrom" },
-        { base + 293, "shutdown" },
+        { base + 293, "shutdown", ignoreFunc},
         { base + 294, "setsockopt" },
         { base + 295, "getsockopt" },
         { base + 296, "sendmsg" },
@@ -496,7 +496,7 @@ class SyscallTable32 :
         { base + 398, "no idea", ignoreFunc},
         { base + 384, "no idea", ignoreFunc},
         { base + 403, "no idea", ignoreFunc},
-        { base + 397, "no idea", ignoreFunc}
+        { base + 397, "no idea", ignoreFunc},
     })
     {}
 };

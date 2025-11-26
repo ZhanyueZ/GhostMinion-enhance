@@ -140,7 +140,7 @@ def config_cache(options, system):
             
             dcache_rp = ThreeQRP(index_bit=d_index_bits, small_queue_percent=0.3, assoc=d_assoc)
             
-            # dcache_rp = LRURP()
+            #dcache_rp = LRURP()
             
             icache = icache_class(size=options.l1i_size,
                                   assoc=options.l1i_assoc, has_ghost=options.iminion, ghostSize=options.ghost_size,ghostAssoc=options.ghost_assoc, write_buffers = 256)
