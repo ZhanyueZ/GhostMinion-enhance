@@ -1697,7 +1697,10 @@ BaseCache::invalidateBlock(CacheBlk *blk)
 
 void
 BaseCache::evictBlock(CacheBlk *blk, PacketList &writebacks)
-{
+{   
+    if((blk->refCount == 1 || blk->refCount == 0) && !blk->inGhost) {
+        stats.oneTimeAccessEvictions++;
+    }
     PacketPtr pkt = evictBlock(blk);
     if (pkt) {
         writebacks.push_back(pkt);
@@ -2292,6 +2295,7 @@ BaseCache::CacheStats::CacheStats(BaseCache &c)
 
     dataExpansions(this, "data_expansions", "number of data expansions"),
     sufFilteredAccesses(this, "suf_filtered", "number of l1 access filtered" ),
+    oneTimeAccessEvictions(this,"one_time_block", "number of one access block"),
     cmd(MemCmd::NUM_MEM_CMDS)
 {
     for (int idx = 0; idx < MemCmd::NUM_MEM_CMDS; ++idx)

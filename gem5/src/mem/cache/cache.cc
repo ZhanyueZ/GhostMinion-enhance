@@ -101,13 +101,7 @@ void BaseCache::commitLoad(Addr addr, Addr pc, uint8_t hit_level) {
     }
 
     static int debug_count = 0;
-    if (debug_count < 50) {
-        std::cout << "DEBUG SUF: Addr=" << std::hex << addr 
-                  << " PC=" << pc 
-                  << " HitLevel=" << (int)hit_level << std::dec << std::endl;
-        debug_count++;
-    }
-    
+
     //suf logic
     if(enableSuf && hit_level == HitLevel::HL_L1D) {
         stats.sufFilteredAccesses++;

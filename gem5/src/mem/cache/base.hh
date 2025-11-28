@@ -1112,6 +1112,8 @@ virtual void sendGhostClear();
         std::vector<std::unique_ptr<CacheCmdStats>> cmd;
 
         Stats::Scalar sufFilteredAccesses;
+
+        Stats::Scalar oneTimeAccessEvictions;
     } stats;
 
     /** Registers probes. */
